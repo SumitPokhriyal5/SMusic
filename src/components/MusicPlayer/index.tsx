@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-
 import { nextSong, prevSong, playPause } from '../../redux/features/playerSlice';
 import Controls from './Controls';
 import Player from './Player';
@@ -8,19 +7,19 @@ import Seekbar from './Seekbar';
 import Track from './Track';
 import VolumeBar from './VolumeBar';
 
-const MusicPlayer = () => {
-  const { activeSong, currentSongs, currentIndex, isActive, isPlaying } = useSelector((state:any) => state.player);
-  const [duration, setDuration] = useState(0);
-  const [seekTime, setSeekTime] = useState(0);
-  const [appTime, setAppTime] = useState(0);
-  const [volume, setVolume] = useState(0.3);
-  const [repeat, setRepeat] = useState(false);
-  const [shuffle, setShuffle] = useState(false);
+const MusicPlayer: React.FC = () => {
+  const { activeSong, currentSongs, currentIndex, isActive, isPlaying } = useSelector((state: any) => state.player);
+  const [duration, setDuration] = useState<number>(0);
+  const [seekTime, setSeekTime] = useState<number>(0);
+  const [appTime, setAppTime] = useState<number>(0);
+  const [volume, setVolume] = useState<number>(0.3);
+  const [repeat, setRepeat] = useState<boolean>(false);
+  const [shuffle, setShuffle] = useState<boolean>(false);
   const dispatch = useDispatch();
 
   useEffect(() => {
     if (currentSongs.length) dispatch(playPause(true));
-  }, [currentIndex]);
+  }, [currentIndex, currentSongs.length, dispatch]);
 
   const handlePlayPause = () => {
     if (!isActive) return;
@@ -70,9 +69,9 @@ const MusicPlayer = () => {
         />
         <Seekbar
           value={appTime}
-          min="0"
+          min={0}
           max={duration}
-          onInput={(event) => setSeekTime(event.target.value)}
+          onInput={(event) => setSeekTime(Number(event.target.value))}
           setSeekTime={setSeekTime}
           appTime={appTime}
         />
@@ -84,11 +83,11 @@ const MusicPlayer = () => {
           repeat={repeat}
           currentIndex={currentIndex}
           onEnded={handleNextSong}
-          onTimeUpdate={(event) => setAppTime(event.target.currentTime)}
-          onLoadedData={(event) => setDuration(event.target.duration)}
+          onTimeUpdate={(event : any) => setAppTime(event.currentTarget.currentTime)}
+          onLoadedData={(event : any) => setDuration(event.currentTarget.duration)}
         />
       </div>
-      <VolumeBar value={volume} min="0" max="1" onChange={(event) => setVolume(event.target.value)} setVolume={setVolume} />
+      <VolumeBar value={volume} min={0} max={1} onChange={(event) => setVolume(Number(event.target.value))} setVolume={setVolume} />
     </div>
   );
 };
