@@ -7,8 +7,18 @@ import Seekbar from './Seekbar';
 import Track from './Track';
 import VolumeBar from './VolumeBar';
 
+export interface MusicPlayerState {
+  player:{
+    activeSong: string,
+    currentSongs: string[],
+    currentIndex: number,
+    isActive: boolean,
+    isPlaying: boolean
+  }
+}
+
 const MusicPlayer: React.FC = () => {
-  const { activeSong, currentSongs, currentIndex, isActive, isPlaying } = useSelector((state: any) => state.player);
+  const { activeSong, currentSongs, currentIndex, isActive, isPlaying } = useSelector((state: MusicPlayerState) => state.player);
   const [duration, setDuration] = useState<number>(0);
   const [seekTime, setSeekTime] = useState<number>(0);
   const [appTime, setAppTime] = useState<number>(0);
@@ -41,7 +51,7 @@ const MusicPlayer: React.FC = () => {
     }
   };
 
-  const handlePrevSong = () => {
+  const handlePrevSong = () : void => {
     if (currentIndex === 0) {
       dispatch(prevSong(currentSongs.length - 1));
     } else if (shuffle) {
